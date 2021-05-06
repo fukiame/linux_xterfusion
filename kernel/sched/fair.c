@@ -13710,8 +13710,10 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
 	if (queued)
 		return;
 
+#ifdef CONFIG_NUMA_BALANCING
 	if (static_branch_unlikely(&sched_numa_balancing))
 		task_tick_numa(rq, curr);
+#endif /* CONFIG_NUMA_BALANCING */
 
 	update_misfit_status(curr, rq);
 	check_update_overutilized_status(task_rq(curr));

@@ -3667,10 +3667,6 @@ static void update_scan_period(struct task_struct *p, int new_cpu)
 }
 
 #else
-static void task_tick_numa(struct rq *rq, struct task_struct *curr)
-{
-}
-
 static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
 {
 }
@@ -13203,8 +13199,10 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
 		entity_tick(cfs_rq, se, queued);
 	}
 
+#ifdef CONFIG_NUMA_BALANCING
 	if (static_branch_unlikely(&sched_numa_balancing))
 		task_tick_numa(rq, curr);
+#endif /* CONFIG_NUMA_BALANCING */
 
 	update_misfit_status(curr, rq);
 	check_update_overutilized_status(task_rq(curr));

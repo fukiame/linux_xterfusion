@@ -212,6 +212,7 @@ void __drm_printfn_info(struct drm_printer *p, struct va_format *vaf)
 }
 EXPORT_SYMBOL(__drm_printfn_info);
 
+#ifdef CONFIG_DRM_DEBUG_PRINT
 void __drm_printfn_dbg(struct drm_printer *p, struct va_format *vaf)
 {
 	const struct drm_device *drm = p->arg;
@@ -224,6 +225,7 @@ void __drm_printfn_dbg(struct drm_printer *p, struct va_format *vaf)
 	__drm_dev_vprintk(dev, KERN_DEBUG, p->origin, p->prefix, vaf);
 }
 EXPORT_SYMBOL(__drm_printfn_dbg);
+#endif
 
 void __drm_printfn_err(struct drm_printer *p, struct va_format *vaf)
 {

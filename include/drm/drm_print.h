@@ -190,7 +190,11 @@ void __drm_puts_coredump(struct drm_printer *p, const char *str);
 void __drm_printfn_seq_file(struct drm_printer *p, struct va_format *vaf);
 void __drm_puts_seq_file(struct drm_printer *p, const char *str);
 void __drm_printfn_info(struct drm_printer *p, struct va_format *vaf);
+#ifdef CONFIG_DRM_DEBUG_PRINT
 void __drm_printfn_dbg(struct drm_printer *p, struct va_format *vaf);
+#else
+static inline void __drm_printfn_dbg(struct drm_printer *p, struct va_format *vaf) { }
+#endif
 void __drm_printfn_err(struct drm_printer *p, struct va_format *vaf);
 void __drm_printfn_line(struct drm_printer *p, struct va_format *vaf);
 

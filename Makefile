@@ -932,6 +932,11 @@ KBUILD_CFLAGS += -Os
 KBUILD_RUSTFLAGS += -Copt-level=s
 endif
 
+# Tell compiler to tune the performance of the code for a specified
+# target processor
+KBUILD_CFLAGS += -mcpu=cortex-a53+crc+crypto
+KBUILD_AFLAGS += -mcpu=cortex-a53+crc+crypto
+
 # Perform swing modulo scheduling immediately before the first scheduling pass.
 # This pass looks at innermost loops and reorders their instructions by
 # overlapping different iterations.

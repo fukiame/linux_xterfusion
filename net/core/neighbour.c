@@ -41,7 +41,7 @@
 
 #include <trace/events/neigh.h>
 
-#define NEIGH_DEBUG 1
+#define NEIGH_DEBUG 0
 #define neigh_dbg(level, fmt, ...)		\
 do {						\
 	if (level <= NEIGH_DEBUG)		\

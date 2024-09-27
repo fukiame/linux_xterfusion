@@ -618,6 +618,7 @@ struct pi_entry {
 #if defined(CONFIG_DYNAMIC_DEBUG) || \
 	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
 #include <linux/dynamic_debug.h>
+#endif
 
 /**
  * pr_debug - Print a debug-level message conditionally
@@ -631,15 +632,8 @@ struct pi_entry {
  * It uses pr_fmt() to generate the format string (dynamic_pr_debug() uses
  * pr_fmt() internally).
  */
-#define pr_debug(fmt, ...)			\
-	dynamic_pr_debug(fmt, ##__VA_ARGS__)
-#elif defined(DEBUG)
-#define pr_debug(fmt, ...) \
-	printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#else
 #define pr_debug(fmt, ...) \
 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#endif
 
 /*
  * Print a one-time message (analogous to WARN_ONCE() et al):
@@ -682,13 +676,8 @@ struct pi_entry {
 #endif
 
 /* If you are writing a driver, please use dev_dbg instead */
-#if defined(DEBUG)
-#define pr_debug_once(fmt, ...)					\
-	printk_once(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#else
 #define pr_debug_once(fmt, ...)					\
 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#endif
 
 /*
  * ratelimited messages with local ratelimit_state,
@@ -734,26 +723,8 @@ struct pi_entry {
 #endif
 
 /* If you are writing a driver, please use dev_dbg instead */
-#if defined(CONFIG_DYNAMIC_DEBUG) || \
-	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
-/* descriptor check is first to prevent flooding with "callbacks suppressed" */
-#define pr_debug_ratelimited(fmt, ...)					\
-do {									\
-	static DEFINE_RATELIMIT_STATE(_rs,				\
-				      DEFAULT_RATELIMIT_INTERVAL,	\
-				      DEFAULT_RATELIMIT_BURST);		\
-	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, pr_fmt(fmt));		\
-	if (DYNAMIC_DEBUG_BRANCH(descriptor) &&				\
-	    __ratelimit(&_rs))						\
-		__dynamic_pr_debug(&descriptor, pr_fmt(fmt), ##__VA_ARGS__);	\
-} while (0)
-#elif defined(DEBUG)
-#define pr_debug_ratelimited(fmt, ...)					\
-	printk_ratelimited(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#else
 #define pr_debug_ratelimited(fmt, ...) \
 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#endif
 
 extern const struct file_operations kmsg_fops;
 
@@ -782,37 +753,17 @@ static inline void print_hex_dump_bytes(const char *prefix_str, int prefix_type,
 
 #endif
 
-#if defined(CONFIG_DYNAMIC_DEBUG) || \
-	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
-#define print_hex_dump_debug(prefix_str, prefix_type, rowsize,	\
-			     groupsize, buf, len, ascii)	\
-	dynamic_hex_dump(prefix_str, prefix_type, rowsize,	\
-			 groupsize, buf, len, ascii)
-#elif defined(DEBUG)
-#define print_hex_dump_debug(prefix_str, prefix_type, rowsize,		\
-			     groupsize, buf, len, ascii)		\
-	print_hex_dump(KERN_DEBUG, prefix_str, prefix_type, rowsize,	\
-		       groupsize, buf, len, ascii)
-#else
 static inline void print_hex_dump_debug(const char *prefix_str, int prefix_type,
 					int rowsize, int groupsize,
 					const void *buf, size_t len, bool ascii)
 {
 }
-#endif
 
-#if defined(DEBUG)
-#define print_hex_dump_devel(prefix_str, prefix_type, rowsize,		\
-			     groupsize, buf, len, ascii)		\
-	print_hex_dump(KERN_DEBUG, prefix_str, prefix_type, rowsize,	\
-		       groupsize, buf, len, ascii)
-#else
 static inline void print_hex_dump_devel(const char *prefix_str, int prefix_type,
 					int rowsize, int groupsize,
 					const void *buf, size_t len, bool ascii)
 {
 }
-#endif
 
 /**
  * print_hex_dump_bytes - shorthand form of print_hex_dump_debug() with default

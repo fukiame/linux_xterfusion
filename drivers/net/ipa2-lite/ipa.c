@@ -269,6 +269,7 @@ static int ipa_setup_ep(struct ipa *ipa, enum ipa_ep_id id)
 		iowrite32(0x002800c4, ipa->mmio + REG_IPA_EP_HDR(id));
 		iowrite32(0x0000000b, ipa->mmio + REG_IPA_EP_HDR_EXT(id));
 		iowrite32(0xff000000, ipa->mmio + REG_IPA_EP_HDR_METADATA_MASK(id));
+		break;
 	default:
 		break;
 	}
@@ -533,6 +534,7 @@ static int ipa_init_sram_part(struct ipa *ipa, enum ipa_part_id mem_id)
 
 		while (payload <= end)
 			*(payload++) = val | 1;
+		break;
 	default:
 		break;
 	}

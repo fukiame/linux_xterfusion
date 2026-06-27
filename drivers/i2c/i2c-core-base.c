@@ -1000,8 +1000,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
 	client->dev.bus = &i2c_bus_type;
 	client->dev.type = &i2c_client_type;
 
-	device_enable_async_suspend(&client->dev);
-
 	device_set_node(&client->dev, fwnode_handle_get(fwnode));
 
 	if (info->swnode) {

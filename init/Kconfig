@@ -247,6 +247,12 @@ config ZENIFY
 	    Ondemand coarse upscaling limit:  80 %  ->  45 %
 	    Ondemand fine upscaling limit..:  95 %  ->  45 %
 
+config ADDITIONAL_CFLAGS
+	string "additional compile flags"
+	default ""
+	help
+	  additional KBUILD_CFLAGS and KBUILD_AFLAGS i guess
+
 config BROKEN
 	bool
 	help

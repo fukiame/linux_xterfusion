@@ -245,7 +245,6 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
 	/* Take note of the planned idle state. */
 	sched_idle_set_state(target_state);
 
-	trace_cpu_idle(index, dev->cpu);
 	time_start = ns_to_ktime(local_clock_noinstr());
 
 	stop_critical_timings();
@@ -280,7 +279,6 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
 
 	sched_clock_idle_wakeup_event();
 	time_end = ns_to_ktime(local_clock_noinstr());
-	trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
 
 	/* The cpu is no longer idle or about to enter idle. */
 	sched_idle_set_state(NULL);
@@ -313,7 +311,6 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
 
 				/* Shallower states are enabled, so update. */
 				dev->states_usage[entered_state].above++;
-				trace_cpu_idle_miss(dev->cpu, entered_state, false);
 				break;
 			}
 		} else if (diff > delay) {
@@ -327,7 +324,6 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
 				 */
 				if (diff - delay >= drv->states[i].target_residency_ns) {
 					dev->states_usage[entered_state].below++;
-					trace_cpu_idle_miss(dev->cpu, entered_state, true);
 				}
 
 				break;

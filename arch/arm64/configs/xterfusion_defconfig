@@ -1,4 +1,5 @@
 # CONFIG_ZENIFY is not set
+CONFIG_ADDITIONAL_CFLAGS="-mcpu=cortex-a53+crc+crypto"
 CONFIG_LOCALVERSION="-msm8953-xterfusion"
 # CONFIG_LOCALVERSION_AUTO is not set
 CONFIG_SYSVIPC=y
